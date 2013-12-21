@@ -59,7 +59,7 @@ public class Editor
 	static
 	{
 		languageExtension.put("Java", "java");
-		languageExtension.put("C++", "cc");
+		languageExtension.put("C++", "cpp");
 		languageExtension.put("C#", "cs");
 		languageExtension.put("VB", "vb");
 		languageExtension.put("Python", "py");
@@ -150,6 +150,11 @@ public class Editor
 			FileWriter writer = new FileWriter(sourceFile);
 			writer.write(text);
 			writer.close();
+
+            // write the copy of the file in Topcoder Project
+            FileWriter copyWriter = new FileWriter("/home/jaydeep/Documents/Cpp/TopCoder/source.cpp");
+            copyWriter.write(text);
+            copyWriter.close();
 		}
 
 		// Expand the driver template and write it to a source file.
@@ -160,6 +165,11 @@ public class Editor
 			FileWriter writer = new FileWriter(driverFile);
 			writer.write(text);
 			writer.close();
+
+            // write the copy of driver in TopCoder Project
+            FileWriter copyWriter = new FileWriter("/home/jaydeep/Documents/Cpp/TopCoder/main.cpp");
+            copyWriter.write(text);
+            copyWriter.close();
 		}
 
 		// Write the test cases to a text file.  The driver code can read this
@@ -182,6 +192,11 @@ public class Editor
 			FileWriter writer = new FileWriter(testcaseFile);
 			writer.write(text.toString());
 			writer.close();
+
+            // write test cases to the working directory where TopCoder Project runs
+            FileWriter copyWriter = new FileWriter("/home/jaydeep/Documents/Cpp/TopCoder-Debug/testcases.txt");
+            copyWriter.write(text.toString());
+            copyWriter.close();
 		}
 
 		// Finally, expand the Makefile template and write it.
@@ -217,7 +232,14 @@ public class Editor
 	 */
 	public String getSource() throws IOException
 	{
-		return Util.readFile(sourceFile) + "\n// Edited by " +
+        // copy the source to codes directory
+        File tmpSource = new File("/home/jaydeep/Documents/Cpp/TopCoder/source.cpp");
+        String sourceCode = Util.readFile(tmpSource);
+        FileWriter writer = new FileWriter(sourceFile);
+        writer.write(sourceCode);
+        writer.close();
+
+		return  sourceCode + "\n// Edited by " +
 		VimCoder.version + "\n// " + VimCoder.website + "\n\n";
 	}
 
@@ -250,6 +272,7 @@ public class Editor
 		String[] flags = {"--servername", "VimCoder" + id, command};
 		vimCommand = Util.concat(vimCommand, flags);
 		vimCommand = Util.concat(vimCommand, arguments);
+        vimCommand = "google-chrome Problem.html".split("\\s");
 		Process child = Runtime.getRuntime().exec(vimCommand, null, directory);
 
 		/* FIXME: This is a pretty bad hack.  The problem is that the Vim

@@ -1,5 +1,5 @@
 
-#include "$CLASSNAME$.cc"
+#include "source.cpp"
 
 #include <algorithm>
 #include <cmath>
